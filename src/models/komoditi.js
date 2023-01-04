@@ -1,11 +1,11 @@
 const db = require('../helpers/db.js');
 
 exports.getAllKomoditi = (cb) => {
-  db.query('SELECT * FROM komoditi ORDER BY id ASC', (err, res) => {
+  db.query('SELECT * FROM price INNER JOIN komoditi_kat ON price.id_komoditi = komoditi_kat.id ORDER BY price.id DESC;', (err, res) => {
     if(err) {
       throw err;
     }
-    cb(res.rows);
+    cb(err, res.rows);
   });
 };
 

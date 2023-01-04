@@ -6,14 +6,18 @@ const jwt = require('jsonwebtoken');
 const {APP_SECRET} = process.env;
 
 exports.komoditiList= (req, res)=>{
-  komoditiModel.getAllKomoditi((results)=>{
-    return response(res, 'Get All Data success', results);
+  komoditiModel.getAllKomoditi((err, results)=>{
+    if (err) {
+      return 'data kosong';
+    }else{
+      return response(res, 'Get All Data success', results);
+    }
   });
 };
 
 exports.komoditiAdd= (req, res)=>{
   komoditiModel.addKomoditi(req.body, (err, results)=>{
-    return response(res, 'Post Komoditi Data success', results);
+    return response(res, 'Create Komoditi Name success', results);
   });
 };
 
@@ -47,7 +51,7 @@ exports.komoditiPrice= (req, res)=>{
 
   komoditiModel.komoditiPrice(req.body, tanggal, guntur, kadungora, cikajang, pamengpeuk, samarang, malangbong,
         rata_minggu_ini, (err, results)=>{
-    return response(res, 'Create Data success', results);
+    return response(res, 'Create Price Komoditi success', results);
   });
 };
 
