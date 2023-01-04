@@ -5,7 +5,19 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const {APP_SECRET} = process.env;
 
-exports.komoditiAdd = (req, res)=>{
+exports.komoditiList= (req, res)=>{
+  komoditiModel.getAllKomoditi((results)=>{
+    return response(res, 'Get All Data success', results);
+  });
+};
+
+exports.komoditiAdd= (req, res)=>{
+  komoditiModel.addKomoditi(req.body, (err, results)=>{
+    return response(res, 'Post Komoditi Data success', results);
+  });
+};
+
+exports.komoditiPrice= (req, res)=>{
   const p_guntur = req.body.p_guntur
   const p_kadungora = req.body.p_kadungora
   const p_cikajang = req.body.p_cikajang
@@ -33,33 +45,9 @@ exports.komoditiAdd = (req, res)=>{
 
   const tanggal = `${day}/${month}/${year}`;
 
-  komoditiModel.getPrevId((err, result) => {
-    if (err) {
-      return errResponse(err, res);
-    }
-    const prvId = result.id
-    komoditiModel.getPricePrev(prvId, (err, result) => {
-      if (err) {
-        return errResponse(err, res);
-      }
-      const medPrev = result.med_minggu_ini
-      const rata_minggu_lalu = parseInt(medPrev)
-      const ket = (rata_minggu_ini > rata_minggu_lalu) ? 'Naik' : (rata_minggu_ini < rata_minggu_lalu) ? 'Turun' : 'Tetap';
-      
-      komoditiModel.komoditiAdd(req.body, tanggal, guntur, kadungora, cikajang, pamengpeuk, samarang, malangbong,
-        rata_minggu_ini, rata_minggu_lalu, ket, (err, result) => {
-        if(err){
-          return errResponse(err, res);
-        }
-        return response(res, 'Post Komoditi succesfully', result);
-      });
-    })
-  })
-};
-
-exports.komoditiList= (req, res)=>{
-  komoditiModel.getAllKomoditi((results)=>{
-    return response(res, 'Get All Data success', results);
+  komoditiModel.komoditiPrice(req.body, tanggal, guntur, kadungora, cikajang, pamengpeuk, samarang, malangbong,
+        rata_minggu_ini, (err, results)=>{
+    return response(res, 'Create Data success', results);
   });
 };
 
