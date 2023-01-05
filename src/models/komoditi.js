@@ -1,7 +1,7 @@
 const db = require('../helpers/db.js');
 
 exports.getAllKomoditi = (cb) => {
-  db.query('SELECT * FROM price INNER JOIN komoditi_kat ON price.id_komoditi = komoditi_kat.id ORDER BY price.id DESC;', (err, res) => {
+  db.query('SELECT price.id, komoditi_kat.komoditi_name, satuan, tanggal, p_guntur, p_kadungora, p_cikajang, p_pamengpeuk, p_samarang, p_malangbong, med_minggu_ini, med_minggu_lalu, keterangan FROM price INNER JOIN komoditi_kat ON price.id_komoditi = komoditi_kat.id ORDER BY price.id DESC', (err, res) => {
     if(err) {
       throw err;
     }
