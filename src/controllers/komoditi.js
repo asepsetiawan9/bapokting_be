@@ -5,19 +5,127 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const {APP_SECRET} = process.env;
 
+
 exports.komoditiList= (req, res)=>{
-  komoditiModel.getAllKomoditi((err, results)=>{
+  komoditiModel.getLastDate((err, results)=>{
     if (err) {
       return 'data kosong';
     }else{
-      return response(res, 'Get All Data success', results);
+      const lastDate = results[0] === undefined ? '' : results[0].tanggal
+      const searchDate = req.query.tanggal
+      komoditiModel.getAllKomoditi(lastDate, searchDate, (err, results)=>{
+        if (err) {
+          return 'data kosong';
+        }else{
+          return response(res, 'Get All Data success', results);
+        }
+      });
     }
   });
+  
+};
+exports.komoditiListNaik= (req, res)=>{
+  komoditiModel.getLastDate((err, results)=>{
+    // results === [] ? console.log('abc') : console.log('def');
+    // console.log('ini err', results);
+    if (err) {
+      return 'data kosong';
+    }else{
+      const lastDate = results[0] === undefined ? '' : results[0].tanggal
+      const searchDate = req.query.tanggal
+      komoditiModel.komoditiListNaik(lastDate, searchDate, (err, results)=>{
+        // console.log(results);
+        if (err) {
+          return 'data kosong';
+        }else{
+          return response(res, 'Get All Data success', results.rowCount);
+        }
+      });
+    }
+  });
+  
+};
+exports.komoditiListTurun= (req, res)=>{
+  komoditiModel.getLastDate((err, results)=>{
+    // results === [] ? console.log('abc') : console.log('def');
+    if (err) {
+      return 'data kosong';
+    }else{
+      const lastDate = results[0] === undefined ? '' : results[0].tanggal
+      const searchDate = req.query.tanggal
+      komoditiModel.komoditiListTurun(lastDate, searchDate, (err, results)=>{
+        // console.log(results);
+        if (err) {
+          return 'data kosong';
+        }else{
+          return response(res, 'Get All Data success', results.rowCount);
+        }
+      });
+    }
+  });
+  
+};
+exports.komoditiListTetap= (req, res)=>{
+  komoditiModel.getLastDate((err, results)=>{
+    // results === [] ? console.log('abc') : console.log('def');
+    if (err) {
+      return 'data kosong';
+    }else{
+      const lastDate = results[0] === undefined ? '' : results[0].tanggal
+      const searchDate = req.query.tanggal
+      komoditiModel.komoditiListTetap(lastDate, searchDate, (err, results)=>{
+        // console.log(results);
+        if (err) {
+          return 'data kosong';
+        }else{
+          return response(res, 'Get All Data success', results.rowCount);
+        }
+      });
+    }
+  });
+  
+};
+exports.komoditiListNaikTurun= (req, res)=>{
+  komoditiModel.getLastDate((err, results)=>{
+    if (err) {
+      return 'data kosong';
+    }else{
+      const lastDate = results[0].tanggal
+      const searchDate = req.query.tanggal
+      komoditiModel.komoditiListNaikTurun(lastDate, searchDate, (err, results)=>{
+        // console.log(results);
+        if (err) {
+          return 'data kosong';
+        }else{
+          return response(res, 'Get All Data success', results);
+        }
+      });
+    }
+  });
+  
 };
 
 exports.komoditiAdd= (req, res)=>{
   komoditiModel.addKomoditi(req.body, (err, results)=>{
     return response(res, 'Create Komoditi Name success', results);
+  });
+};
+exports.komoditiAll= (req, res)=>{
+  komoditiModel.getOneData((err, results)=>{
+    // console.log(results[0].id_komoditi);
+    if (err) {
+      console.log(err);
+    }else{
+      const id_komoditi = results[0].id_komoditi;
+      komoditiModel.allKomoditi(id_komoditi, (err, results)=>{
+        return response(res, 'Get All Komoditi success', results);
+      });
+    }
+  })
+};
+exports.komoditiKategori= (req, res)=>{
+  komoditiModel.komoditiKategori((err, results)=>{
+    return response(res, 'Get All Komoditi Kategori success', results);
   });
 };
 
@@ -45,9 +153,23 @@ exports.komoditiPrice= (req, res)=>{
   const today = new Date();
   const day = today.getDate();
   const month = today.getMonth() + 1; 
+  const monthNames = [
+    "Januari",
+    "Februari",
+    "Maret",
+    "April",
+    "Mei",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember",
+  ]; 
   const year = today.getFullYear();
 
-  const tanggal = `${day}/${month}/${year}`;
+  const tanggal = `${day} ${monthNames[month - 1]} ${year}`;
 
   komoditiModel.komoditiPrice(req.body, tanggal, guntur, kadungora, cikajang, pamengpeuk, samarang, malangbong,
         rata_minggu_ini, (err, results)=>{

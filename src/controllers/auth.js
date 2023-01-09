@@ -16,6 +16,7 @@ exports.register = (req, res)=>{
 
 // aa
 exports.login = (req, res)=>{
+  console.log(req.body);
   const {email, password} = req.body;
   authModel.getUserByEmail(email, (err, results) => {
     if(results.rows.length < 1){
@@ -29,7 +30,7 @@ exports.login = (req, res)=>{
         if(cpRes){
           console.log();
           const token = jwt.sign({id: user.id}, APP_SECRET || 'D3f4uLt');
-          return response(res, 'Login Success', [{id, token}]);
+          return response(res, 'Login Success', {id, token});
         }
         return response(res, 'Check your email and pasword', null, null, 400);
 

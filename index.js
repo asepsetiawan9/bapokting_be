@@ -1,7 +1,9 @@
 const express = require('express');
-require('dotenv').config();
-
 const app = express();
+var cors = require('cors');
+
+app.use(cors());
+require('dotenv').config();
 
 app.use(express.urlencoded({extended: false}));
 
