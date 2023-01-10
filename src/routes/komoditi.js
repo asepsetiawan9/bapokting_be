@@ -6,7 +6,7 @@ const validationCheck = require('../middleware/checkValidation');
 
 komoditi.post('/komoditi-add', authMiddle, validationCheck, komoditiController.komoditiAdd);
 komoditi.get('/komoditi-all', komoditiController.komoditiAll);
-komoditi.get('/komoditi_name_all', komoditiController.komoditiNameAll);
+
 komoditi.get('/komoditi-statistik', komoditiController.komoditiStatistik);
 komoditi.post('/komoditi-price', authMiddle, validationCheck, komoditiController.komoditiPrice);
 komoditi.get('/list', komoditiController.komoditiList);
