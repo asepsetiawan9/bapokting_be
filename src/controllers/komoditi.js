@@ -110,6 +110,27 @@ exports.komoditiAdd= (req, res)=>{
     return response(res, 'Create Komoditi Name success', results);
   });
 };
+exports.komoditiStatistik= (req, res)=>{
+  komoditiModel.getOneData((err, results)=>{
+    if (err) {
+      console.log(err);
+    }else{
+      const id_komoditi_body = req.query.id_komoditi
+
+      const id_komoditi = results[0] === undefined ? '' : results[0].id_komoditi;
+      komoditiModel.allStatistik(id_komoditi, id_komoditi_body, (err, resultsData)=>{
+        const tanggalArray = resultsData.map(obj => obj.tanggal);
+        const hargaArray = resultsData.map(obj => obj.med_minggu_ini);
+        const hargaInt = hargaArray.map(str => parseInt(str));
+        const hargaMataUang = hargaInt.map(int => int.toLocaleString('id-ID'));
+        // console.log(resultsData[0].komoditi_name);
+        const komoditi_name = resultsData[0].komoditi_name
+        console.log(komoditi_name);
+        return response(res, 'Get All Komoditi success', {komoditi_name, tanggalArray, hargaMataUang });
+      });
+    }
+  })
+};
 exports.komoditiAll= (req, res)=>{
   komoditiModel.getOneData((err, results)=>{
     // console.log(results[0].id_komoditi);
@@ -122,6 +143,11 @@ exports.komoditiAll= (req, res)=>{
       });
     }
   })
+};
+exports.komoditiAll= (req, res)=>{
+  komoditiModel.allNameKomoditi((err, results)=>{
+    return response(res, 'Get All Komoditi success', results);
+  });
 };
 exports.komoditiKategori= (req, res)=>{
   komoditiModel.komoditiKategori((err, results)=>{

@@ -134,6 +134,31 @@ exports.allKomoditi=(id_komoditi, cb)=>{
     }
   });
 };
+exports.allNameKomoditi=(cb)=>{
+  const que=`SELECT * from komoditi_kat ORDER BY id ASC`;
+  db.query(que,(err,res)=>{
+    if(err){
+      cb(err);
+    }else{
+      cb(err, res.rows);
+    }
+  });
+};
+exports.allStatistik=(id_komoditi, id_komoditi_body, cb)=>{
+  const que=`
+  SELECT tanggal, med_minggu_ini, komoditi_kat.komoditi_name
+  FROM price
+  INNER JOIN komoditi_kat ON komoditi_kat.id = price.id_komoditi
+  WHERE price.id_komoditi = ${id_komoditi}
+  ORDER BY price.id ASC`;
+  db.query(que,(err,res)=>{
+    if(err){
+      cb(err);
+    }else{
+      cb(err, res.rows);
+    }
+  });
+};
 exports.getOneData=(cb)=>{
   const que='SELECT id_komoditi from price LIMIT 1';
   db.query(que,(err,res)=>{
